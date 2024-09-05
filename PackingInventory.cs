@@ -59,9 +59,9 @@ class Pack
             CurrentArrayWeight += currentWeight.Weight;
             CurrentArrayVolume += currentWeight.Volume;
             count  += item.GetLength(0);
-            if (CurrentArrayWeight > MaxWeight) { Console.WriteLine("Exceed Max WeightLimit"); return false; } //NOT Printing 
+            if (CurrentArrayWeight > MaxWeight) { Console.WriteLine("Exceed Max WeightLimit"); return false; }
             if (CurrentArrayVolume > MaxVolume) { Console.WriteLine("Exceed Max VolumeLimit"); return false; }
-            if (count > TotalItem) { Console.WriteLine("Exceed Max ItemLimit"); return false; }
+            if (count > TotalItem) { Console.WriteLine("Exceed Max ItemLimit"); return false; } //NOT Printing 
         }
         return true;
     }
