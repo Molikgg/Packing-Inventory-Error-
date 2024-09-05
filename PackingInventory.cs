@@ -1,30 +1,33 @@
-Console.WriteLine("Add item");
-Pack pack = new Pack(10, 15, 15);
+Console.WriteLine("Add item:--> Arrow / Bow / Rope / Water / Food / Sword");
+Pack pack = new Pack(4, 10, 10);
+InventoryItem[]? inventoryItems = new InventoryItem[pack.TotalItem];
 for (int i = 0; i < pack.TotalItem; i++)
 {
 
+    Display();
     string Useritem = Console.ReadLine()!;
-   InventoryItem itemList = Useritem.ToLower() switch
+    InventoryItem? itemList = Useritem?.ToLower() switch
     {
         "arrow" => new Arrow(),
         "bow" => new Bow(),
-        "rope"=> new Rope(),
+        "rope" => new Rope(),
         "water" => new Water(),
         "food" => new Food(),
-        "sword" => new Sword()
+        "sword" => new Sword(),
+        _ => null
     };
-    InventoryItem[] inventoryItems = new InventoryItem[pack.TotalItem];
-    inventoryItems[i] = itemList;
-    Display();
-    if (pack.Packing(inventoryItems) == false) { break; }
+    inventoryItems[i] = itemList;// i+1..i+2...are all null
+    if (pack.Packing(inventoryItems) == false) break;
 
     void Display()
     {
         Console.WriteLine($"""
-        Current Count: {i}/ Max Weight: {pack.TotalItem}
-        Current Weight:{itemList.Weight}/ Max Weight: {pack.MaxWeight}
-        Current Volume:{itemList.Volume}/ Max Weight: {pack.MaxVolume}
+        Current Count: {i}/ Max Count: {pack.TotalItem} 
+        Current Weight:{pack.CurrentArrayWeight}/ Max Weight: {pack.MaxWeight}
+        Current Volume:{pack.CurrentArrayVolume}/ Max Volume: {pack.MaxVolume}
         """);
+        pack.CurrentArrayWeight = 0; //Reset so that value of previous array would be erazed 
+        pack.CurrentArrayVolume = 0;
     }
 }
 
@@ -44,19 +47,21 @@ class Pack
     public int TotalItem { get; set; } = 0;
     public float MaxWeight { get; set; }
     public float MaxVolume { get; set; }
+    public float CurrentArrayVolume = 0;
+    public float CurrentArrayWeight =0;
     public bool Packing(InventoryItem[] item)
-    {
-        foreach (InventoryItem currentItem in item)
+    {//
+
+        foreach (InventoryItem currentWeight in item)
         {
-            float weight = 0;
-            float volume = 0;
-            int count = 0;
-            weight = weight + currentItem.Weight;
-            volume = volume + currentItem.Volume;
-            count = count + item.GetLength(0);
-            if (weight > MaxWeight) return false;
-            if (volume > MaxVolume) return false;
-            if (count > TotalItem) return false;
+            if(currentWeight == null) continue;
+            int count = 0; // How is is WORKING???
+            CurrentArrayWeight += currentWeight.Weight;
+            CurrentArrayVolume += currentWeight.Volume;
+            count  += item.GetLength(0);
+            if (CurrentArrayWeight > MaxWeight) { Console.WriteLine("Exceed Max WeightLimit"); return false; } //NOT Printing 
+            if (CurrentArrayVolume > MaxVolume) { Console.WriteLine("Exceed Max VolumeLimit"); return false; }
+            if (count > TotalItem) { Console.WriteLine("Exceed Max ItemLimit"); return false; }
         }
         return true;
     }
